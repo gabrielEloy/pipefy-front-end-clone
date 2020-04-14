@@ -16,7 +16,7 @@ export default function Card({ data, index, listId }) {
     })
   });
 
-  const [, dropRef] = useDrop({
+  const [ { isDraggingBetweenLists, targetDrop } , dropRef] = useDrop({
     accept: "CARD",
     hover(item, monitor) {
       const draggedItem = { index: item.index, listId: item.listId };
@@ -50,8 +50,12 @@ export default function Card({ data, index, listId }) {
       move(draggedItem, targetItem);
 
       item.index = targetItem.index;
-      item.listId = targetItem.listId;
-    }
+      item.listId = targetItem.listId; 
+    },
+    collect: monitor => ({
+      isDraggingBetweenLists: monitor.isOver(),
+      targetDrop: monitor.getItem()
+    })
   });
 
   const ref = useRef();
