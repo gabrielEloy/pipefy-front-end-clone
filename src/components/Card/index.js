@@ -12,11 +12,11 @@ export default function Card({ data, index, listId }) {
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: "CARD", index, id, listId },
     collect: monitor => ({
-      isDragging: monitor.isDragging()
+      isDragging: monitor.isDragging(),
     })
   });
 
-  const [ { isDraggingBetweenLists, targetDrop } , dropRef] = useDrop({
+  const [ { isDraggingBetweenLists } , dropRef] = useDrop({
     accept: "CARD",
     hover(item, monitor) {
       const draggedItem = { index: item.index, listId: item.listId };
@@ -58,12 +58,14 @@ export default function Card({ data, index, listId }) {
     })
   });
 
+  
+
   const ref = useRef();
 
   dragRef(dropRef(ref));
 
   return (
-    <Container isDragging={isDragging} ref={ref}>
+    <Container isDragging={isDragging || isDraggingBetweenLists} ref={ref}>
       <header>
         {labels.map(label => (
           <Label key={label} color={label} />
