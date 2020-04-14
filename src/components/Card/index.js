@@ -10,19 +10,22 @@ export default function Card({ data, index, listId }) {
   const { move } = useContext(BoardContext);
 
   const [{ isDragging }, dragRef] = useDrag({
-    item: { type: "CARD", index, id, listId},
-    collect: monitor => ({
+    item: { type: "CARD", index, id, listId },
+    collect: (monitor, props) => ({
       isDragging: monitor.isDragging(),
     })
   });
 
-  const [, dropRef] = useDrop({
+  const [ { isDraggingBetweenLists, targetDrop } , dropRef] = useDrop({
     accept: "CARD",
     hover(item, monitor) {
-      const draggedItem = {index: item.index, listId: item.listId}
-      const targetItem = {index, listId}
+      const draggedItem = { index: item.index, listId: item.listId };
+      const targetItem = { index, listId };
 
-      if (draggedItem.index === targetItem.index) {
+      if (
+        draggedItem.listId === listId &&
+        draggedItem.index === targetItem.index
+      ) {
         return;
       }
 
@@ -32,19 +35,27 @@ export default function Card({ data, index, listId }) {
       const draggedOffset = monitor.getClientOffset();
       const draggedTop = draggedOffset.y - targetSize.top;
 
+      const insertAfter = draggedTop > targetCenter;
       //not sure about this block at all
       /**/
-      if (draggedItem.index < targetItem.index && draggedTop < targetCenter) {
-        return;
+      if (draggedItem.listId === listId) {
+        if (draggedItem.index < targetItem.index && !insertAfter) {
+          return;
+        }
+        if (draggedItem.index > targetItem.index && insertAfter) {
+          return;
+        }
       }
-      if (draggedItem.index > targetItem.index && draggedTop > targetCenter) {
-        return;
-      }
-      
+
       move(draggedItem, targetItem);
 
       item.index = targetItem.index;
-    }
+      item.listId = targetItem.listId; 
+    },
+    collect: monitor => ({
+      isDraggingBetweenLists: monitor.isOver(),
+      targetDrop: monitor.getItem()
+    })
   });
 
   const ref = useRef();

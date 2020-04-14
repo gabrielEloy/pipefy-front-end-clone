@@ -2,12 +2,10 @@ import React from 'react';
 
 import { Header } from './styles';
 
-export default function index() {
+export default function index({ title = 'Pipefy Clone'}) {
   return (
-    <div>
       <Header>
-        <h1>Pipefy Clone</h1>
+        <h1>{title}</h1>
       </Header>
-    </div>
   )
 }
