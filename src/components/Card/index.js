@@ -11,8 +11,8 @@ export default function Card({ data, index, listId }) {
 
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: "CARD", index, id, listId },
-    collect: (monitor, props) => ({
-      isDragging: monitor.isDragging(),
+    collect: monitor => ({
+      isDragging: monitor.isDragging()
     })
   });
 
