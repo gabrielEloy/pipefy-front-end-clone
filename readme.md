@@ -7,7 +7,11 @@ In the future, more features will be available, as well as a backend, (probably)
     <img src="./images/project.png"/ height="300">
 </p>
 
-##### Running 
+##### Access it here
+
+[Here is the deployed version on netlify](elastic-hawking-211d67.netlify.com)
+
+##### Running it locally
 
 This is a common react app, so all that must be done in order to run it is installing the necessary packages with 
 
